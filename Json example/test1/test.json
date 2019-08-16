@@ -1,0 +1,37 @@
+{
+    "rows": [
+        {
+            "id": "01ae6145-90a3-11e7-7a69-8f55000cda4b",
+            "accountId": "8757f3bf-8504-11e7-7a69-971100001fef",
+            "minimumBalance": 1000.0,
+            "modificationsCount": 0,
+            "isSerialTrackable": false,
+            "stock": 1450.0,
+            "reserve": 60.0,
+            "inTransit": 0.0,
+            "quantity": 1390.0
+        },
+        {
+            "id": "01ae6145-90a3-11e7-7a69-",
+            "accountId": "8504-11e7-7a69-971100001fef",
+            "minimumBalance": 500.0,
+            "modificationsCount": 1,
+            "isSerialTrackable": true,
+            "stock": 725.0,
+            "reserve": 30.0,
+            "inTransit": -1.0,
+            "quantity": 680.0
+        },
+        {
+            "id": "01ae6145-90a3-11e7-",
+            "accountId": "11e7-7a69-971100001fef",
+            "minimumBalance": 250.0,
+            "modificationsCount": 2,
+            "isSerialTrackable": false,
+            "stock": 362.5,
+            "reserve": 15.0,
+            "inTransit": 250.11,
+            "quantity": 340.0
+        }
+    ]
+}
