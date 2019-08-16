@@ -1,0 +1,109 @@
+{
+    "name": "bars",
+    "description": "Система БАРС",
+    "defdrv": "settings/default",
+    "simul": "no",
+    "ip": "192.168.10.12",
+    "port": "5555",
+    "subs": [
+        {
+            "name": "scm",
+            "scheme": "scm/scheme/scm.tpr",
+            "id": "1",
+            "file": "scmfp",
+            "decription": "SCM",
+            "main": "192.168.10.60",
+            "second": "192.168.10.60",
+            "path": "scm",
+            "step": "20"
+        },
+        {
+            "name": "DU",
+            "scheme": "DU/scheme/DU.tpr",
+            "id": "2",
+            "file": "DUfp",
+            "decription": "DU",
+            "main": "192.168.10.50",
+            "second": "192.168.10.150",
+            "path": "DU",
+            "step": "20"
+        },
+        {
+            "name": "AKNP1",
+            "scheme": "AKNP1/scheme/AKNP1.tpr",
+            "id": "3",
+            "file": "AKNP1fp",
+            "decription": "AKNP1",
+            "main": "192.168.10.51",
+            "second": "192.168.10.151",
+            "path": "AKNP1",
+            "step": "20"
+        },
+        {
+            "name": "Baz1",
+            "scheme": "Baz1/scheme/Baz1.tpr",
+            "id": "4",
+            "file": "Baz1fp",
+            "decription": "Baz1",
+            "main": "192.168.10.52",
+            "second": "192.168.10.152",
+            "path": "Baz1",
+            "step": "20"
+        },
+        {
+            "name": "AKNP3",
+            "scheme": "AKNP3/scheme/AKNP3.tpr",
+            "id": "5",
+            "file": "AKNP3fp",
+            "decription": "AKNP3",
+            "main": "192.168.10.53",
+            "second": "192.168.10.153",
+            "path": "AKNP3",
+            "step": "20"
+        },
+        {
+            "name": "Baz2",
+            "scheme": "Baz2/scheme/Baz2.tpr",
+            "id": "6",
+            "file": "Baz2fp",
+            "decription": "Baz2",
+            "main": "192.168.10.54",
+            "second": "192.168.10.154",
+            "path": "Baz2",
+            "step": "20"
+        },
+        {
+            "name": "AKNP4",
+            "scheme": "AKNP4/scheme/AKNP4.tpr",
+            "id": "7",
+            "file": "AKNP4fp",
+            "decription": "AKNP4",
+            "main": "192.168.10.55",
+            "second": "192.168.10.155",
+            "path": "AKNP4",
+            "step": "20"
+        },
+        {
+            "name": "RPU",
+            "scheme": "RPU/scheme/RPU.tpr",
+            "id": "8",
+            "file": "RPUfp",
+            "decription": "RPU",
+            "main": "192.168.10.31",
+            "second": "192.168.10.131",
+            "path": "RPU",
+            "step": "20"
+        },
+        {
+            "name": "AKNP2",
+            "scheme": "AKNP2/scheme/AKNP2.tpr",
+            "id": "9",
+            "file": "AKNP2fp",
+            "decription": "AKNP2",
+            "main": "192.168.10.57",
+            "second": "192.168.10.157",
+            "path": "AKNP2",
+            "step": "20"
+        }
+    ]
+}
