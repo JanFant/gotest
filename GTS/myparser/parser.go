@@ -41,6 +41,7 @@ func Xmlpars(path string) {
 		DataDrv[tempDrv.Name] = *tempDrv
 	}
 	fmt.Println("fin")
+	fmt.Println("asd")
 }
 
 //DataTablepars data driver parser (*DrTable for correct return)
