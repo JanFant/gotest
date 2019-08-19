@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	myparser.Xmlpars("D:/md/pti/pr/")
+	myparser.Xmlpars("D:/space/1/pr/")
 }
