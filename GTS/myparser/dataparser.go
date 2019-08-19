@@ -40,3 +40,39 @@ type Signal struct {
 	Chan   string `xml:"name,attr"`
 	Format string `xml:"format,attr"`
 }
+
+//FpDev asd
+type FpDev struct {
+	Fp  DataFp  `xml:"subsystem"`
+	Dev DataDev `xml:"devices"`
+}
+
+//DataFp data for *fp.xml
+type DataFp struct {
+	Variable Variable `xml:"variable"`
+	Devices  Devices  `xml:"devices"`
+}
+
+//Variable Variable
+type Variable struct {
+	Name string `xml:"xml,attr"`
+}
+
+//Devices Devices
+type Devices struct {
+	Name string `xml:"xml,attr"`
+}
+
+//DataDev data for dev*.xml
+type DataDev struct {
+	Name string   `xml:"xml,attr"`
+	Dev  []Device `xml:"device"`
+}
+
+//Device Device
+type Device struct {
+	Name  string `xml:"name,attr"`
+	Drv   string `xml:"driver,attr"`
+	Slot  string `xml:"slot,attr"`
+	Descr string `xml:"description,attr"`
+}
