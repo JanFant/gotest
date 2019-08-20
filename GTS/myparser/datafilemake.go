@@ -8,11 +8,6 @@ type Varfile struct {
 	Vars    []Var    `xml:"var"`
 }
 
-// //Vars asd
-// type Vars struct {
-// 	Var []Var `xml:"var"`
-// }
-
 //Var array variables
 type Var struct {
 	Name        string `xml:"name,attr"`
