@@ -15,5 +15,6 @@ func main() {
 	if err != nil {
 		fmt.Println("Error in func Xmlpars:" + err.Error())
 	}
-	fmt.Println(pr.Name)
+	myparser.MakeAV(pr)
+	// fmt.Println(pr.Name)
 }
