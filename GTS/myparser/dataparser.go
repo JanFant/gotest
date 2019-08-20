@@ -8,7 +8,8 @@ type Genetal struct {
 	// Simul       string `xml:"simul,attr" json:"simul"`
 	// Ip          string `xml:"ip,attr" json:"ip"`
 	// Port        string `xml:"port,attr" json:"port"`
-	Subs []Subs `xml:"subs" json:"subs"`
+	Subs  []Subs `xml:"subs" json:"subs"`
+	DrTab map[string]DrTable
 }
 
 // Subs main.xml struct
@@ -22,6 +23,7 @@ type Subs struct {
 	// Second      string `xml:"second,attr" json:"second"`
 	Path string `xml:"path,attr" json:"path"`
 	// Step        string `xml:"step,attr" json:"step"`
+	Data *FpDev
 }
 
 // DrTable  all driver includ defdrv

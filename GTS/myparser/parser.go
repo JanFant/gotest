@@ -7,50 +7,64 @@ import (
 )
 
 //Xmlpars mainparser
-func Xmlpars(path string) {
-	var DataMain *Genetal               // parsed Main.xml
-	DataDrv := make(map[string]DrTable) // parsed defdrv
-
+func Xmlpars(path string) (*Genetal, error) {
+	var DataMain *Genetal // parsed Main.xml
 	namefile := path + "main.xml"
 	DataMain, err := PMainXML(namefile)
 	if err != nil {
-		fmt.Println("Error parser MainProj :" + err.Error())
+		fmt.Println("Error parser :" + namefile + " - " + err.Error())
+		return nil, err
 	}
 
 	//parser for subs
-	for _, subs := range DataMain.Subs {
-		FpPath := path + subs.Path + "/" + subs.File + ".xml"
-		PSubsXML(FpPath)
+	for i, subs := range DataMain.Subs {
+		FpPath := path + subs.Path + "/"
+		DataMain.Subs[i].Data, err = PSubsXML(FpPath, subs.File)
+		if err != nil {
+			fmt.Println("Error parser :" + FpPath + " - " + err.Error())
+			return nil, err
+		}
 	}
 
 	//parser for defdrv
 	DrTablePath := path + DataMain.Defdrv // path to all driver tables
-	DataDrv, err = PDefdrvXML(DrTablePath)
+	DataMain.DrTab, err = PDefdrvXML(DrTablePath)
 	if err != nil {
 		fmt.Println("Error parser devdrv :" + err.Error())
-		return
+		return nil, err
 	}
-
-	println(DataDrv["fds16"].Name)
-
-	fmt.Println("fin")
+	return DataMain, err
 }
 
 //PSubsXML parser *fp.xml + dev*.xml
-func PSubsXML(FpPath string) (*Genetal, error) {
+func PSubsXML(FpPathm, FpName string) (*FpDev, error) {
 	var tempData FpDev
-	datafile, err := ioutil.ReadFile(FpPath)
+	// fp.xml
+	str := FpPathm + FpName + ".xml"
+	datafile, err := ioutil.ReadFile(str)
 	if err != nil {
-		fmt.Println("Error read file :" + FpPath + " - " + err.Error())
+		fmt.Println("Error read file :" + str + " - " + err.Error())
 		return nil, err
 	}
 	err = xml.Unmarshal(datafile, &tempData.Fp)
 	if err != nil {
-		fmt.Println("Error unmarshal : " + FpPath + " - " + err.Error())
+		fmt.Println("Error unmarshal : " + str + " - " + err.Error())
+		return nil, err
+	}
+	// dev.xml
+	str = FpPathm + tempData.Fp.Devices.Name + ".xml"
+	datafile, err = ioutil.ReadFile(str)
+	if err != nil {
+		fmt.Println("Error read file :" + str + " - " + err.Error())
+		return nil, err
+	}
+	err = xml.Unmarshal(datafile, &tempData.Dev)
+	if err != nil {
+		fmt.Println("Error unmarshal : " + str + " - " + err.Error())
 		return nil, err
 	}
 
-	return nil, err
+	return &tempData, err
 }
 
 //PMainXML parser Main.xml
@@ -58,12 +72,12 @@ func PMainXML(mainpath string) (*Genetal, error) {
 	var tempData Genetal
 	datafile, err := ioutil.ReadFile(mainpath)
 	if err != nil {
-		fmt.Println("Error read file main.xml: " + err.Error())
+		fmt.Println("Error read file :" + mainpath + " - " + err.Error())
 		return nil, err
 	}
 	err = xml.Unmarshal(datafile, &tempData)
 	if err != nil {
-		fmt.Println("Error unmarshal main.xml: " + err.Error())
+		fmt.Println("Error unmarshal :" + mainpath + " - " + err.Error())
 		return nil, err
 	}
 	return &tempData, err
