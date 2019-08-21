@@ -1,4 +1,4 @@
-package myparser
+package myproj
 
 // Genetal main.xml struct
 type Genetal struct {
@@ -10,6 +10,7 @@ type Genetal struct {
 	// Port        string `xml:"port,attr" json:"port"`
 	Subs  []Subs `xml:"subs" json:"subs"`
 	DrTab map[string]DrTable
+	Path  string
 }
 
 // Subs main.xml struct

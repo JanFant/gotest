@@ -1,4 +1,4 @@
-package myparser
+package myproj
 
 import (
 	"encoding/xml"
@@ -9,16 +9,13 @@ import (
 	"github.com/clbanning/mxj"
 )
 
-//MakeAV asd
+//MakeAV make var and ass file
 func MakeAV(Data *Genetal) error {
-	// end
 	err := VarMake(Data)
 	if err != nil {
 		fmt.Println("Error VarMake :" + err.Error())
 		return err
 	}
-
-	// var err error
 	err = AssMake(Data)
 	if err != nil {
 		fmt.Println("Error AssMake :" + err.Error())
@@ -27,7 +24,7 @@ func MakeAV(Data *Genetal) error {
 	return err
 }
 
-//VarMake make var.xml files
+//VarMake make *var.xml files
 func VarMake(Data *Genetal) error {
 	var err error
 	for _, sub := range Data.Subs {
@@ -44,7 +41,7 @@ func VarMake(Data *Genetal) error {
 				tempVFile.Vars = append(tempVFile.Vars, tempVar)
 			}
 		}
-		varname = "var/" + sub.Data.Fp.Variable.Name + ".xml"
+		varname = Data.Path + sub.Name + "/" + sub.Data.Fp.Variable.Name + ".xml"
 		err = SaveMarshalfile(varname, tempVFile)
 		if err != nil {
 			fmt.Println("Error SaveMarshalfile :" + varname + " " + err.Error())
@@ -74,7 +71,7 @@ func SaveMarshalfile(namefile string, file interface{}) error {
 	return err
 }
 
-//AssMake make ass.xml file
+//AssMake make *ass.xml file
 func AssMake(Data *Genetal) error {
 	var err error
 	for _, sub := range Data.Subs {
@@ -89,7 +86,7 @@ func AssMake(Data *Genetal) error {
 			}
 		}
 		file.Indent(2)
-		namefile := "dev/" + sub.Data.Dev.Name + ".xml"
+		namefile := Data.Path + sub.Name + "/" + sub.Data.Dev.Name + ".xml"
 		err = file.WriteToFile(namefile)
 		if err != nil {
 			fmt.Println("Error WriteToFile :" + namefile + " - " + err.Error())

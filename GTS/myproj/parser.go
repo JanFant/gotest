@@ -1,4 +1,4 @@
-package myparser
+package myproj
 
 import (
 	"encoding/xml"
@@ -15,7 +15,7 @@ func Xmlpars(path string) (*Genetal, error) {
 		fmt.Println("Error parser :" + namefile + " - " + err.Error())
 		return nil, err
 	}
-
+	DataMain.Path = path
 	//parser for subs
 	for i, subs := range DataMain.Subs {
 		FpPath := path + subs.Path + "/"

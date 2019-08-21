@@ -1,4 +1,4 @@
-package myparser
+package myproj
 
 import "encoding/xml"
 

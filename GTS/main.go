@@ -2,22 +2,33 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"runtime"
 
-	"./myparser"
+	"./myproj"
 )
 
-const str = "D:/space/1/pr/"
-
-// const str = "E:/workfolder/Pr/"
-
 func main() {
-	pr, err := myparser.Xmlpars(str)
+	fmt.Println("GTS started...")
+
+	var str string
+	if len(os.Args) == 1 {
+		if runtime.GOOS == "windows" {
+			str = "D:/md/pti/prSign/"
+		} else {
+			str = "pr"
+		}
+	} else {
+		str = os.Args[1]
+	}
+
+	pr, err := myproj.Xmlpars(str)
 	if err != nil {
 		fmt.Println("Error in func Xmlpars:" + err.Error())
 	}
-	err = myparser.MakeAV(pr)
+	err = myproj.MakeAV(pr)
 	if err != nil {
 		fmt.Println("Error in func MakeAV:" + err.Error())
 	}
-	// fmt.Println(pr.Name)
+	fmt.Println("GTS work finished...")
 }
