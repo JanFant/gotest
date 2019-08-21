@@ -42,6 +42,12 @@ func VarMake(Data *Genetal) error {
 			}
 		}
 		varname = Data.Path + sub.Name + "/" + sub.Data.Fp.Variable.Name + ".xml"
+		// netblock for goteck
+		tempVar.Name = "netblock"
+		tempVar.Description = "( netblock )"
+		tempVar.Format = "1"
+		tempVFile.Vars = append(tempVFile.Vars, tempVar)
+
 		err = SaveMarshalfile(varname, tempVFile)
 		if err != nil {
 			fmt.Println("Error SaveMarshalfile :" + varname + " " + err.Error())

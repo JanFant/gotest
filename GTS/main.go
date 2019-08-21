@@ -25,10 +25,12 @@ func main() {
 	pr, err := myproj.Xmlpars(str)
 	if err != nil {
 		fmt.Println("Error in func Xmlpars:" + err.Error())
+		return
 	}
 	err = myproj.MakeAV(pr)
 	if err != nil {
 		fmt.Println("Error in func MakeAV:" + err.Error())
+		return
 	}
 	fmt.Println("GTS work finished...")
 }
