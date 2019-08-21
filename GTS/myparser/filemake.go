@@ -4,18 +4,26 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+
+	"github.com/beevik/etree"
+	"github.com/clbanning/mxj"
 )
 
 //MakeAV asd
 func MakeAV(Data *Genetal) error {
-
+	// end
 	err := VarMake(Data)
 	if err != nil {
 		fmt.Println("Error VarMake :" + err.Error())
 		return err
 	}
 
-	// VarMake(Data, 0)
+	// var err error
+	err = AssMake(Data)
+	if err != nil {
+		fmt.Println("Error AssMake :" + err.Error())
+		return err
+	}
 	return err
 }
 
@@ -53,7 +61,11 @@ func SaveMarshalfile(namefile string, file interface{}) error {
 		fmt.Println("Error Marshal file :" + namefile + " " + err.Error())
 		return err
 	}
-
+	tempfile, err = mxj.BeautifyXml(tempfile, "", "\t")
+	if err != nil {
+		fmt.Println("Error BeautifyXml file :" + namefile + " " + err.Error())
+		return err
+	}
 	err = ioutil.WriteFile(namefile, tempfile, 0644)
 	if err != nil {
 		fmt.Println("Error WriteFile :" + namefile + " " + err.Error())
@@ -62,7 +74,27 @@ func SaveMarshalfile(namefile string, file interface{}) error {
 	return err
 }
 
-//AssMake ...
-func AssMake() {
-
+//AssMake make ass.xml file
+func AssMake(Data *Genetal) error {
+	var err error
+	for _, sub := range Data.Subs {
+		file := etree.NewDocument()
+		assign := file.CreateElement("assign")
+		for _, dev := range sub.Data.Dev.Dev {
+			devname := assign.CreateElement(dev.Name)
+			for _, sig := range Data.DrTab[dev.Drv].Bsig.Msig {
+				def := devname.CreateElement("def")
+				def.CreateAttr("name", dev.Name+sig.Chan)
+				def.CreateText(sig.Chan)
+			}
+		}
+		file.Indent(2)
+		namefile := "dev/" + sub.Data.Dev.Name + ".xml"
+		err = file.WriteToFile(namefile)
+		if err != nil {
+			fmt.Println("Error WriteToFile :" + namefile + " - " + err.Error())
+			return err
+		}
+	}
+	return err
 }

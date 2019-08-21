@@ -14,8 +14,3 @@ type Var struct {
 	Description string `xml:"description,attr"`
 	Format      string `xml:"format,attr"`
 }
-
-//Assignfile data for assfile
-type Assignfile struct {
-	Assign string `xml:"assign"`
-}
