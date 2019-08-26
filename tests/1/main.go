@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"sort"
 	"strconv"
@@ -13,6 +14,8 @@ type statistics struct {
 	numbers []float64
 	mean    float64
 	median  float64
+	stdDev  float64
+	mode    []float64
 }
 
 func getStats(numbers []float64) (stats statistics) {
@@ -20,6 +23,7 @@ func getStats(numbers []float64) (stats statistics) {
 	sort.Float64s(stats.numbers)
 	stats.mean = sum(numbers) / float64(len(numbers))
 	stats.median = median(numbers)
+	stdDev(&stats)
 	return stats
 }
 
@@ -37,6 +41,33 @@ func median(number []float64) float64 {
 		result = (result + number[middle-1]) / 2
 	}
 	return result
+}
+
+func stdDev(stat *statistics) {
+	var sum float64
+	for _, num := range stat.numbers {
+		sum += math.Pow((num - stat.mean), 2)
+	}
+	stat.stdDev = math.Sqrt(sum / float64(len(stat.numbers)-1))
+}
+
+func mode(stat *statistics) {
+	var (
+		freq map[float64]int
+	)
+	for _, numj := range stat.numbers {
+		if _, ok := freq[numj]; ok {
+			continue
+		}
+		freq[numj] = 0
+		for _, numi := range stat.numbers {
+			if numj == numi {
+				freq[numj]++
+			}
+		}
+	}
+	
+
 }
 
 func main() {
@@ -102,5 +133,6 @@ func formatStats(stats statistics) string {
 	<tr><td>Count</td><td>%d</td></tr>
 	<tr><td>Mean</td><td>%f</td></tr>
 	<tr><td>Median</td><td>%f</td></tr>
-	</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median)
+	<tr><td>Std. Dev.</td><td>%f</td></tr>
+	</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median, stats.stdDev)
 }
