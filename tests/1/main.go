@@ -53,20 +53,22 @@ func stdDev(stat *statistics) {
 
 func mode(stat *statistics) {
 	var (
-		freq map[float64]int
+		freq []float64
 	)
+	k := 0
+	m := 0
 	for _, numj := range stat.numbers {
-		if _, ok := freq[numj]; ok {
-			continue
-		}
-		freq[numj] = 0
-		for _, numi := range stat.numbers {
-			if numj == numi {
-				freq[numj]++
+		freq[k*2] = numj
+		for m < len(stat.numbers) {
+			if freq[k] == stat.numbers[m] {
+				freq[k*2+1]++
+				m++
+			} else {
+				break
 			}
 		}
+
 	}
-	
 
 }
 
