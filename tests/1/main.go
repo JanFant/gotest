@@ -24,6 +24,7 @@ func getStats(numbers []float64) (stats statistics) {
 	stats.mean = sum(numbers) / float64(len(numbers))
 	stats.median = median(numbers)
 	stdDev(&stats)
+	mode(&stats)
 	return stats
 }
 
@@ -53,21 +54,41 @@ func stdDev(stat *statistics) {
 
 func mode(stat *statistics) {
 	var (
-		freq []float64
+		k        = 1
+		pastK    = 0
+		pastnNum = 0.0
 	)
-	k := 0
-	m := 0
-	for _, numj := range stat.numbers {
-		freq[k*2] = numj
-		for m < len(stat.numbers) {
-			if freq[k] == stat.numbers[m] {
-				freq[k*2+1]++
-				m++
+	for i, num := range stat.numbers {
+		if i == 0 {
+			pastnNum = num
+			k = 1
+			continue
+		} else {
+			if pastnNum == num {
+				k++
 			} else {
-				break
+				if pastK > k {
+					k = 1
+					pastnNum = num
+					continue
+				} else if pastK == k {
+					stat.mode = append(stat.mode, pastnNum)
+					k = 1
+				} else {
+					stat.mode = stat.mode[:0]
+					stat.mode = append(stat.mode, pastnNum)
+					pastK = k
+					k = 1
+				}
 			}
+			pastnNum = num
 		}
-
+	}
+	if pastK == k {
+		stat.mode = append(stat.mode, pastnNum)
+	} else if k > pastK {
+		stat.mode = stat.mode[:0]
+		stat.mode = append(stat.mode, pastnNum)
 	}
 
 }
@@ -136,5 +157,6 @@ func formatStats(stats statistics) string {
 	<tr><td>Mean</td><td>%f</td></tr>
 	<tr><td>Median</td><td>%f</td></tr>
 	<tr><td>Std. Dev.</td><td>%f</td></tr>
-	</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median, stats.stdDev)
+	<tr><td>Mode</td><td>%2.2f</td></tr>
+	</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median, stats.stdDev, stats.mode)
 }

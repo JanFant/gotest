@@ -1,7 +1,7 @@
 package main
 
 import (
-	"math"
+	"fmt"
 	"sort"
 )
 
@@ -13,60 +13,53 @@ type statistics struct {
 	mode    []float64
 }
 
-func mode(stat *statistics) {
+func mode(stat statistics) []float64 {
 	var (
 		temp []float64
 	)
-	a := make(map[float64]int)
-	k := 0
+	k := 1
+	pastK := 0
+	pastnNum := 0.0
 	sort.Float64s(stat.numbers)
-	i := 0
-	for i = range stat.numbers {
-		if i == (len(stat.numbers) - 1) {
-			temp = append(temp, stat.numbers[i])
-			temp = append(temp, float64(k+1))
-			a[stat.numbers[i]] = k + 1
-			break
-		}
-		if stat.numbers[i] == stat.numbers[i+1] {
-			k++
+	for i, num := range stat.numbers {
+		if i == 0 {
+			pastnNum = num
+			k = 1
+			continue
 		} else {
-			temp = append(temp, stat.numbers[i-1])
-			temp = append(temp, float64(k+1))
-			a[stat.numbers[i-1]] = k + 1
-			k = 0
+			if pastnNum == num {
+				k++
+			} else {
+				if pastK > k {
+					k = 1
+					pastnNum = num
+					continue
+				} else if pastK == k {
+					temp = append(temp, pastnNum)
+					k = 1
+				} else {
+					temp = temp[:0]
+					temp = append(temp, pastnNum)
+					pastK = k
+					k = 1
+				}
+			}
+			pastnNum = num
 		}
 	}
-	for i < len(a) {
-		math.Max(
+	if pastK == k {
+		temp = append(temp, pastnNum)
+	} else if k > pastK {
+		temp = temp[:0]
+		temp = append(temp, pastnNum)
 	}
-	// o := sort.SearchFloat64s(stat.numbers, stat.numbers[1])
-	// println(o)
-	// for range stat.numbers {
-	// 	if m >= len(stat.numbers) {
-	// 		break
-	// 	}
-	// 	freq[k*2] = stat.numbers[m]
-	// 	freq[k*2+1]++
-	// 	m++
-	// 	for m < len(stat.numbers) {
-	// 		if freq[k*2] == stat.numbers[m] {
-	// 			freq[k*2+1]++
-	// 			m++
-	// 		} else {
-	// 			break
-	// 		}
-	// 	}
-	// 	k++
-	// }
 
-	// m = 0
-
+	return temp
 }
 
 func main() {
 	var a statistics
-	a.numbers = append(a.numbers, 1, 2, 1, 1, 2, 2, 1, 3, 3, 3, 3, 5)
+	a.numbers = append(a.numbers, 1, 2, 1, 1, 1, 2, 2, 1, 3, 2, 3, 3, 3, 3, 5, 5, 5, 5)
 
-	mode(&a)
+	fmt.Println(mode(a))
 }
