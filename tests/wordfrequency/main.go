@@ -72,6 +72,7 @@ func readAndUpdateFrequencies(reader *bufio.Reader, frequencyForWord map[string]
 	}
 }
 
+//SplitOnNonLetters asd
 func SplitOnNonLetters(s string) []string {
 	notALetter := func(char rune) bool { return !unicode.IsLetter(char) }
 	return strings.FieldsFunc(s, notALetter)
