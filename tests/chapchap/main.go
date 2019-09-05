@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strings"
 )
 
@@ -29,6 +30,9 @@ func main() {
 		"[XRE]",
 		"EnableProfileMigrator=0",
 		"EnableExtensionManager=1",
+		"[BBba]",
+		"ProfileMigrator=0",
+		"Manager=1",
 	}
 	MyparsStrint := MyParsInt(iniData)
 	parsStrint := ParseIni(iniData)
@@ -49,6 +53,44 @@ func main() {
 	fmt.Println(iniData)
 	fmt.Println(MyparsStrint)
 	fmt.Println(parsStrint)
+	fmt.Println("-------------------------")
+	Printini(parsStrint)
+	fmt.Println("-------------------------")
+	PrintIni2(parsStrint)
+}
+
+// Printini  aaa
+func Printini(data map[string]map[string]string) {
+	for j, fmap := range data {
+		fmt.Printf("[%v]\n", j)
+		for i, smap := range fmap {
+			fmt.Printf("%v=%v\n", i, smap)
+		}
+		fmt.Println()
+	}
+}
+
+//PrintIni2 aaa
+func PrintIni2(ini map[string]map[string]string) {
+	groups := make([]string, 0, len(ini))
+	for group := range ini {
+		groups = append(groups, group)
+	}
+	sort.Strings(groups)
+	for i, group := range groups {
+		fmt.Printf("[%s]\n", group)
+		keys := make([]string, 0, len(ini[group]))
+		for key := range ini[group] {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+		for _, key := range keys {
+			fmt.Printf("%s=%s\n", key, ini[group][key])
+		}
+		if i+1 < len(groups) {
+			fmt.Println()
+		}
+	}
 }
 
 //MyParsInt a
