@@ -2,87 +2,96 @@ package main
 
 import (
 	"fmt"
-	"math"
-	"strings"
-	"unicode/utf8"
+	"reflect"
 )
 
-//293
 func main() {
-	// for i := 1; i <= 4; i++ {
-	// 	a, b, c := PythagoreanTriple(i, i+1)
-	// 	q1 := Heron(a, b, c)
-	// 	q2 := Heron(PythagoreanTriple(i, i+1))
-	// 	fmt.Printf("q1 == %10f == q2 == %10f\n", q1, q2)
-	// }
-	//palindrom
-	str := "А роза упала на лапу Азора"
-	fmt.Println("Word =", str, " is palindrom =", Palindrom(str))
-	//hofstadter
-	// females := make([]int, 20)
-	// males := make([]int, len(females))
-	// for n := range females {
-	// 	females[n] = HofstadterFemale(n)
-	// 	males[n] = HofstadterMale(n)
-	// }
-	// fmt.Println("F", females)
-	// fmt.Println("M", males)
+	i := Minimum(4, 3, 8, 2, 9).(int)
+	fmt.Printf("%T %v\n", i, i)
+	f := Minimum(9.4, -5.4, 3.8, 17.0, -3.1, 0.0).(float64)
+	fmt.Printf("%T %v\n", f, f)
+	s := Minimum("K", "X", "B", "C", "CC", "CA", "D", "M").(string)
+	fmt.Printf("%T %q\n", s, s)
+	fmt.Println("===================================")
+	xs := []int{2, 4, 6, 8}
+	fmt.Println("5 @", Index(xs, 5), " 6 @", Index(xs, 6))
+	ys := []string{"C", "B", "K", "A"}
+	fmt.Println("Z @", Index(ys, "Z"), " A @", Index(ys, "A"))
 
-	//fibo
-	// for n := 0; n < 20; n++ {
-	// 	fmt.Print(Fibonacci(n), " ")
-	// }
-	// fmt.Println()
+	fmt.Println("===================================")
+	fmt.Println("5 @", IndexReflectX(xs, 5), " 6 @", IndexReflectX(xs, 6))
+	fmt.Println("Z @", IndexReflectX(ys, "Z"), " A @", IndexReflectX(ys, "A"))
+
+	fmt.Println("===================================")
+	fmt.Println("5 @", IndexReflect(xs, 5), " 6 @", IndexReflect(xs, 6))
+	fmt.Println("Z @", IndexReflect(ys, "Z"), " A @", IndexReflect(ys, "A"))
+
 }
 
-func Palindrom(str string) bool {
-	str = strings.ReplaceAll(str, " ", "")
-	str = strings.ToLower(str)
-	return Pali(str)
-}
-
-func Pali(str string) bool {
-	if utf8.RuneCountInString(str) <= 1 {
-		return true
+func Minimum(first interface{}, rest ...interface{}) interface{} {
+	minimum := first
+	for _, x := range rest {
+		switch x := x.(type) {
+		case int:
+			if x < minimum.(int) {
+				minimum = x
+			}
+		case float64:
+			if x < minimum.(float64) {
+				minimum = x
+			}
+		case string:
+			if x < minimum.(string) {
+				minimum = x
+			}
+		}
 	}
-	first, sizeofFirst := utf8.DecodeRuneInString(str)
-	second, sizeofsecond := utf8.DecodeLastRuneInString(str)
-	if first != second {
-		return false
-	}
-	return Pali(str[sizeofFirst : len(str)-sizeofsecond])
+	return minimum
 }
 
-func HofstadterFemale(n int) int {
-	if n <= 0 {
-		return 1
+func Index(xs interface{}, x interface{}) int {
+	switch slice := xs.(type) {
+	case []int:
+		for i, y := range slice {
+			if y == x.(int) {
+				return i
+			}
+		}
+	case []string:
+		for i, y := range slice {
+			if y == x.(string) {
+				return i
+			}
+		}
 	}
-	return n - HofstadterMale(HofstadterFemale(n-1))
+	return -1
 }
 
-func HofstadterMale(n int) int {
-	if n <= 0 {
-		return 0
+func IndexReflectX(xs interface{}, x interface{}) int { // Более длинное решение
+	if slice := reflect.ValueOf(xs); slice.Kind() == reflect.Slice {
+		for i := 0; i < slice.Len(); i++ {
+			switch y := slice.Index(i).Interface().(type) {
+			case int:
+				if y == x.(int) {
+					return i
+				}
+			case string:
+				if y == x.(string) {
+					return i
+				}
+			}
+		}
 	}
-	return n - HofstadterFemale(HofstadterMale(n-1))
+	return -1
 }
 
-func Heron(a, b, c int) float64 {
-	a1, b1, c1 := float64(a), float64(b), float64(c)
-	s := (a1 + b1 + c1) / 2
-	return math.Sqrt(s * (s - a1) * (s - b1) * (s - c1))
-}
-
-func PythagoreanTriple(m, n int) (a, b, c int) {
-	if m < n {
-		m, n = n, m
+func IndexReflect(xs interface{}, x interface{}) int {
+	if slice := reflect.ValueOf(xs); slice.Kind() == reflect.Slice {
+		for i := 0; i < slice.Len(); i++ {
+			if reflect.DeepEqual(x, slice.Index(i)) {
+				return i
+			}
+		}
 	}
-	return (m * m) - (n * n), (2 * m * n), (m * m) + (n * n)
-}
-
-func Fibonacci(n int) int {
-	if n < 2 {
-		return n
-	}
-	return Fibonacci(n-1) + Fibonacci(n-2)
+	return -1
 }
