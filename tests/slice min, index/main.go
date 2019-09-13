@@ -28,6 +28,7 @@ func main() {
 
 }
 
+//Minimum aa
 func Minimum(first interface{}, rest ...interface{}) interface{} {
 	minimum := first
 	for _, x := range rest {
@@ -49,6 +50,7 @@ func Minimum(first interface{}, rest ...interface{}) interface{} {
 	return minimum
 }
 
+//Index aa
 func Index(xs interface{}, x interface{}) int {
 	switch slice := xs.(type) {
 	case []int:
@@ -67,6 +69,7 @@ func Index(xs interface{}, x interface{}) int {
 	return -1
 }
 
+//IndexReflectX aa
 func IndexReflectX(xs interface{}, x interface{}) int { // Более длинное решение
 	if slice := reflect.ValueOf(xs); slice.Kind() == reflect.Slice {
 		for i := 0; i < slice.Len(); i++ {
@@ -85,12 +88,23 @@ func IndexReflectX(xs interface{}, x interface{}) int { // Более длинн
 	return -1
 }
 
+//IndexReflect aa
 func IndexReflect(xs interface{}, x interface{}) int {
 	if slice := reflect.ValueOf(xs); slice.Kind() == reflect.Slice {
 		for i := 0; i < slice.Len(); i++ {
 			if reflect.DeepEqual(x, slice.Index(i)) {
 				return i
 			}
+		}
+	}
+	return -1
+}
+
+//IntSliceIndex aa
+func IntSliceIndex(xs []int, x int) int {
+	for i, y := range xs {
+		if x == y {
+			return i
 		}
 	}
 	return -1
