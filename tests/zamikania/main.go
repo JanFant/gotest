@@ -29,6 +29,18 @@ func main() {
 		func(i int) { even = append(even, readings[i]) })
 	fmt.Println(even)
 
+	fmt.Println("------------------------------------")
+	parts := []string{"X15", "T14", "X23", "A41", "L19", "X57", "A63"}
+	var Xparts []string
+	Filter(len(parts), func(i int) bool { return parts[i][0] == 'X' },
+		func(i int) { Xparts = append(Xparts, parts[i]) })
+	fmt.Println(Xparts)
+
+	fmt.Println("------------------------------------")
+	var product int64 = 1
+	Filter(10, func(i int) bool { return i%2 != 0 },
+		func(i int) { product *= int64(i) })
+	fmt.Println(product)
 }
 
 //SliceIndex aa
