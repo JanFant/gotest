@@ -9,7 +9,7 @@ import (
 //NetVchsVas main cicle website
 func NetVchsVas() {
 	// http.HandleFunc("/", homePage)
-	http.Handle("/", http.FileServer(http.Dir("./sitetemp/vchsvas.html")))
+	http.Handle("/", http.FileServer(http.Dir("./sitetemp")))
 	http.HandleFunc("/vchs", tableVCHS)
 	http.HandleFunc("/vas", tableVAS)
 	if err := http.ListenAndServe(":8080", nil); err != nil {
