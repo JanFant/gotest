@@ -9,9 +9,13 @@ import (
 //NetVchsVas main cicle website
 func NetVchsVas() {
 	// http.HandleFunc("/", homePage)
-	http.Handle("/", http.FileServer(http.Dir("./sitetemp")))
+	// http.Handle("/", http.FileServer(http.Dir("./sitetemp")))
+	http.HandleFunc("/vchsvas", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "sitetemp/vchsvas.html")
+	})
 	http.HandleFunc("/vchs", tableVCHS)
 	http.HandleFunc("/vas", tableVAS)
+	fmt.Println("Server VCHSVAS started")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal("failed to start server", err)
 	}
