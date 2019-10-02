@@ -10,17 +10,12 @@ import (
 	"fmt"
 
 	"./netsite"
+	"./request"
 )
 
 func main() {
-	go netsite.NetVchsVas()
-	for {
+	go request.StartQuery()
+	netsite.NetVchsVas()
 
-	}
-	// for {
-	// 	data := request.QueryData()
-	// 	time.Sleep(time.Second / 2)
-	// 	fmt.Println(data.ModbusData.Modbuses[0].Lastops[0] + "    " + time.Now().String())
-	// }
 	fmt.Println("end")
 }
