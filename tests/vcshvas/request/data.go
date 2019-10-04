@@ -9,7 +9,7 @@ var (
 
 	datavas = map[string][]string{"RPU": {"A0IT03IRP", "B0IT03IRP"},
 		"Baz1": {"A2IP01IZ1", "B2IP01IZ1", "A0IT01IZ1", "B0IT01IZ1"},
-		"Baz2": {"A2IP01IZ2", "B2IP01IZ2", "A0IT01IZ2", "B0IT01IZ2"},
+		"Baz2": {"A2IP01IZ2", "B2IP01IZ2", "A0IT02IZ2", "B0IT02IZ2"},
 		"DU":   {"A3IP02IDU", "B3IP02IDU"}}
 	datavchs = map[string][]string{"AKNP1": {"R0IN01FV1", "R0IN02FV1", "R0IN03FV1"},
 		"AKNP2": {"R0IN01FV2", "R0IN02FV2", "R0IN03FV2"},
@@ -17,11 +17,12 @@ var (
 		"AKNP4": {"R0IN01FV4", "R0IN02FV4", "R0IN03FV4"},
 		"RPU":   {"R0IN01VRP", "R0IN02VRP", "R0IN03VRP", "R0IN06VRP", "R0IN07VRP"}}
 
-	ipserver   string = "http://192.168.10.30:8080/"
-	strAllMB   string = "allModbuses"
-	strModval  string = "modvalue?name="
-	strModinfo string = "modinfo?name="
-	GlobalData DevSubLvl1
+	ipserver     string = "http://192.168.10.30:8080/"
+	strAllMB     string = "allModbuses"
+	strModval    string = "modvalue?name="
+	strModinfo   string = "modinfo?name="
+	GlobalData   DevSubLvl1
+	modInfofirst bool = false
 )
 
 type DevSubLvl1 struct {

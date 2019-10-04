@@ -2,11 +2,9 @@ package request
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -17,7 +15,6 @@ func StartQuery() {
 		data := QueryData()
 		parserData(data)
 		time.Sleep(time.Second / 2)
-		// fmt.Println(data.ModbusData.Modbuses[0].Lastops[0] + "    " + time.Now().String())
 	}
 }
 
@@ -31,8 +28,10 @@ func QueryData() OneData {
 	for num, str := range allstr {
 		body := MakeRequest(ipserver + strModval + str)
 		json.Unmarshal(body, &data.ModValueData[num])
-		body = MakeRequest(ipserver + strModinfo + str)
-		json.Unmarshal(body, &data.ModInfoData[num])
+		if !modInfofirst {
+			body = MakeRequest(ipserver + strModinfo + str)
+			json.Unmarshal(body, &data.ModInfoData[num])
+		}
 	}
 	return data
 }
@@ -56,20 +55,21 @@ func parserData(moddata OneData) {
 				for _, valueMod := range moddata.ModValueData[numSub].Values {
 					if value.Name == valueMod.Name {
 						GlobalData.Mute.Lock()
-						// GlobalData.Data[num1].Sub[num2].Value[num3].val, _ = strconv.Atoi(strings.TrimSpace(valueMod.Value))
 						GlobalData.Data[num1].Sub[num2].Value[num3].val = valueMod.Value
-						// GlobalData.Data[num1].Sub[num2].Value[num3].val, _ = strconv.ParseFloat(strings.TrimSpace(valueMod.Value), 64)
 						GlobalData.Mute.Unlock()
 						break
 					}
 				}
-				for _, valueInf := range moddata.ModInfoData[numSub].Registrs {
-					if value.Name == valueInf.Name {
-						GlobalData.Mute.Lock()
-						GlobalData.Data[num1].Sub[num2].Value[num3].Desc = valueInf.Desc
-						GlobalData.Mute.Unlock()
-						break
+				if !modInfofirst {
+					for _, valueInf := range moddata.ModInfoData[numSub].Registrs {
+						if value.Name == valueInf.Name {
+							GlobalData.Mute.Lock()
+							GlobalData.Data[num1].Sub[num2].Value[num3].Desc = valueInf.Desc
+							GlobalData.Mute.Unlock()
+							break
+						}
 					}
+					modInfofirst = true
 				}
 				//-----
 			}
@@ -89,31 +89,6 @@ func MakeRequest(str string) []byte {
 		log.Fatalln(err)
 	}
 	return body
-}
-
-func Modeselect() {
-	var dev string
-	fmt.Println("Для выхода из программы quit")
-	for {
-		fmt.Print("Введите какое устройство (vchs, vas):")
-		fmt.Scan(&dev)
-		switch {
-		case dev == "vas":
-			GlobalData.Mute.Lock()
-			devwork(GlobalData.Data[0], vasdev, 0)
-			GlobalData.Mute.Unlock()
-			fmt.Println(dev)
-		case dev == "vchs":
-			GlobalData.Mute.Lock()
-			devwork(GlobalData.Data[1], vchsdev, 1)
-			GlobalData.Mute.Unlock()
-		case dev == "quit":
-			return
-		default:
-			fmt.Println("не верно введено устройство")
-
-		}
-	}
 }
 
 func Firstdata() {
@@ -141,92 +116,4 @@ func makedata(data *DevSub, name string, devise []string, maphead map[string][]s
 			data.Sub[num].Value[numm].Name = val
 		}
 	}
-}
-
-func devwork(data DevSub, dev []string, numdevglobal int) {
-	var (
-		strdev string
-		sub    string
-	)
-	for num, dev := range dev {
-		strdev = strdev + fmt.Sprint(num, " - ", dev, ";  ")
-	}
-	for {
-		fmt.Print("введите номер подсистемы : ", strdev, ": ")
-		fmt.Scan(&sub)
-		numdev, _ := strconv.Atoi(sub)
-		if numdev > len(dev) {
-			fmt.Println("указан неверный номер устройства")
-			continue
-		} else if sub == "quit" {
-			break
-		} else {
-			var strval []string
-			for numval, val := range data.Sub[numdev].Value {
-				tempstr := fmt.Sprint(numval, " - ", val.Name, " ", val.Desc)
-				strval = append(strval, tempstr)
-			}
-			fmt.Println("введите номер переменной : ")
-			for _, str := range strval {
-				fmt.Println(str)
-			}
-			fmt.Scan(&sub)
-			numval, _ := strconv.Atoi(sub)
-			if numval > len(vasdev) {
-				fmt.Println("указан неверный номер устройства")
-				continue
-			} else if sub == "quit" {
-				break
-			} else {
-				table(numdevglobal, numdev, numval)
-			}
-		}
-	}
-}
-
-func table(num1, num2, num3 int) {
-	fmt.Println(num3, "asdasdasdasdasd")
-	if num1 == 0 {
-		//vas
-	} else {
-		//vchs
-		if num3 == 0 || num3 == 3 || num3 == 4 {
-			//камера СНМ 11
-			paintCHM(num1, num2, num3)
-		} else {
-			//камера КНК
-		}
-	}
-	// GlobalData.Data[num1].Sub[num2].Value[num3].
-
-	// fmt.Println(value.Name, " ", value.Desc, " ", value.val)
-}
-
-func paintCHM(num1, num2, num3 int) {
-	// var ch = make(chan bool)
-	// refuse(ch)
-	fmt.Println(lineTop)
-	fmt.Println(lineMainTop)
-	for _, Fet := range Fetal {
-		tempValue, _ := strconv.ParseFloat(GlobalData.Data[num1].Sub[num2].Value[num3].val, 64)
-		Sf := SigF(tempValue, Fetal[0])
-		fmt.Println(lineTop)
-		fmt.Printf(lineStrMain, Fet, tempValue, Sf)
-		// if ref := <-ch; ref == true {
-		// 	continue
-		// }
-	}
-	fmt.Println(lineTop)
-}
-
-func refuse(ch chan bool) {
-	// var (
-	// 	sub string
-	// )
-	// fmt.Scan(&sub)
-	// if sub == "\n" {
-	ch <- true
-	// } else {
-	// ch <- false
-	// }
 }

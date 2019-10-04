@@ -9,13 +9,13 @@ package main
 import (
 	"fmt"
 
+	"./netsite"
 	"./request"
 )
 
 func main() {
 	request.Firstdata()
-	go request.StartQuery()
-	// request.Modeselect()
-	request.Guimain()
+	request.StartQuery()
+	netsite.NetVchsVas()
 	fmt.Println("end")
 }
