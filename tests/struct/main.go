@@ -25,6 +25,7 @@ func (option IntOption) IsValid() bool {
 	return option.Min <= option.Value && option.Value <= option.Max
 }
 
+//
 type StringOption struct {
 	OptionCommon
 	Value string
